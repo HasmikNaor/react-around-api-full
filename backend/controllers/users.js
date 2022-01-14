@@ -1,15 +1,9 @@
 const User = require('../models/user');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-const userErrorHandler = (err, req, res) => {
-  if (err.name === 'ValidationError' || err.name === 'CastError') {
-    return res.status(400).send({ message: err.message });
-  }
-  if (err.name === 'UserNotFoundError') {
-    return res.status(404).send({ message: err.message });
-  }
-
-  return res.status(500).send({ message: err.message });
-};
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const userNotFoundHandler = () => {
   const error = new Error('document not found');
@@ -22,22 +16,29 @@ module.exports.getUsers = (req, res) => {
   User.find({})
     .orFail(() => userNotFoundHandler())
     .then((users) => res.status(200).send(users))
-    .catch((err) => userErrorHandler(err, req, res));
+    .catch(next);
 };
 
 module.exports.getUserById = (req, res) => {
   User.findById(req.params.userId)
     .orFail(() => userNotFoundHandler())
     .then((user) => res.status(200).send(user))
-    .catch((err) => userErrorHandler(err, req, res));
+    .catch(next);
 };
 
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
+  const { name, about, avatar, email } = req.body;
 
-  User.create({ name, about, avatar })
+  bcrypt.hash(req.body.password, 10)
+    .then(hash => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash
+    }))
     .then((user) => res.status(201).send(user))
-    .catch((err) => userErrorHandler(err, req, res));
+    .catch(next);
 };
 
 module.exports.updateProfile = (req, res) => {
@@ -50,7 +51,7 @@ module.exports.updateProfile = (req, res) => {
   })
     .orFail(() => userNotFoundHandler())
     .then((user) => res.status(201).send(user))
-    .catch((err) => userErrorHandler(err, req, res));
+    .catch(next);
 };
 
 module.exports.updateAvatar = (req, res) => {
@@ -64,5 +65,30 @@ module.exports.updateAvatar = (req, res) => {
   })
     .orFail(() => userNotFoundHandler())
     .then((user) => res.status(201).send(user))
-    .catch((err) => userErrorHandler(err, req, res));
+    .catch(next);
 };
+
+module.exports.getCurrentUser = (req, res) => {
+  const id = req.user._id;
+
+  User.find({ _id: id })
+    .orFail(() => userNotFoundHandler())
+    .then((user) => res.status(201).send(user))
+    .catch(next);
+}
+
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        { expiresIn: '7d' }
+      );
+      res.send({ token });
+    })
+    .catch(next);
+}
+
+

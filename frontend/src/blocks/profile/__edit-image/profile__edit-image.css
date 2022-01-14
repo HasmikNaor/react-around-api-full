@@ -1,0 +1,10 @@
+.profile__edit-image {
+  margin:auto;
+  box-sizing:border-box;
+ }
+ 
+@media screen and (max-width:500px) {
+  .profile__edit-image {
+    width:7.5px;
+  }
+}

@@ -1,0 +1,12 @@
+.register__submit-btn {
+  display:block;
+  width:100%;
+  margin-top:216px;
+  font-size:18px;
+  line-height:22px;
+  font-weight:400;
+  padding:14px 84px;
+  border-radius:2px;
+  border:none;
+  cursor:pointer;
+}

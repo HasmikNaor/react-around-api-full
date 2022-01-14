@@ -1,0 +1,17 @@
+.popup__close-btn {
+  align-self:flex-end;
+  width:49px;
+  height:49px;
+  background-color:transparent;
+  border:none;
+  padding:0;
+  transform:rotate(-45deg);
+  position:absolute;
+  right:-49px;
+  top:-49px;
+  transition:opacity linear 0.5s;
+}
+.popup__close-btn:hover {
+  cursor:pointer;
+  opacity:0.6;
+}
