@@ -70,7 +70,7 @@ module.exports.updateAvatar = (req, res) => {
 
 module.exports.getCurrentUser = (req, res) => {
   const id = req.user._id;
-
+  console.log(req)
   User.find({ _id: id })
     .orFail(() => userNotFoundHandler())
     .then((user) => res.status(201).send(user))

@@ -72,10 +72,9 @@ class Api {
 }
 
 export const api = new Api({
-  // baseUrl: "https://around.nomoreparties.co/v1/group-12",
   baseUrl: "https://around.students.nomoreparties.sbs",
   headers: {
-    Authorization: "e3c1d69b-5d6d-4954-a353-d1cd5804394f",
+    Authorization: localStorage.getItem('token'),
     "Content-Type": "application/json"
   }
 });
