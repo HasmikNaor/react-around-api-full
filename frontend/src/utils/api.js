@@ -12,6 +12,7 @@ class Api {
 
   getInitialCards() {
     return this.customFetch(`${this._baseUrl}/cards`, {
+      mode: 'no-cors',
       headers: this._headers
     })
   }
