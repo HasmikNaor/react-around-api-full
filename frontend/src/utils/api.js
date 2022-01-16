@@ -73,7 +73,7 @@ class Api {
 }
 
 export const api = new Api({
-  baseUrl: "https://around.students.nomoreparties.sbs",
+  baseUrl: "https://api.around.students.nomoreparties.sbs",
   headers: {
     Authorization: localStorage.getItem('token'),
     "Content-Type": "application/json"

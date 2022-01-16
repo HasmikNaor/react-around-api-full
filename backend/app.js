@@ -23,8 +23,14 @@ const { PORT = 3000 } = process.env;
 
 app.use(express.json());
 
-app.use(cors());
-// app.options(cors()); //enable requests for all routes 
+const corsOptions = {
+  origin: '*',
+  credentials: true,            //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+}
+
+app.use(cors(corsOptions));
+app.options('*', cors()); //enable requests for all routes 
 
 app.use((req, res, next) => {
   const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE";
