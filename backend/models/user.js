@@ -32,12 +32,12 @@ const userSchema = new mongoose.Schema({
   avatar: {
     default: 'https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg',
     type: String,
-    validate: {
-      validator(v) {
-        return /https?:\/\/(w{3}\.)?.{1,}\.com\/?(.+)?#?/.test(v);
-      },
-      message: 'not valid address',
-    },
+    // validate: {
+    //   validator(v) {
+    //     return /https?:\/\/(w{3}\.)?.{1,}\.com\/?(.+)?#?/.test(v);
+    //   },
+    //   message: 'not valid address',
+    // },
   },
 });
 
