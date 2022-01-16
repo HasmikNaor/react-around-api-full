@@ -23,6 +23,9 @@ const { PORT = 3000 } = process.env;
 
 app.use(express.json());
 
+app.use(cors());
+app.options('*', cors()); //enable requests for all routes 
+
 const validateURL = (value, helpers) => {
   if (validator.isURL(value)) {
     return value;
@@ -39,8 +42,8 @@ const validateEmail = (value, helpers) => {
 
 app.use(requestLogger); // enabling the request logger
 
-app.use(cors());
-app.options('*', cors()); //enable requests for all routes 
+// app.use(cors());
+// app.options('*', cors()); //enable requests for all routes 
 
 app.get('/crash-test', () => {
   setTimeout(() => {
