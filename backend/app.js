@@ -23,12 +23,14 @@ const { PORT = 3000 } = process.env;
 
 app.use(express.json());
 
+app.use(cors());
+app.options(cors()); //enable requests for all routes 
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
-})
 
-app.use(cors());
-app.options('*', cors()); //enable requests for all routes 
+  next();
+})
 
 const validateURL = (value, helpers) => {
   if (validator.isURL(value)) {
