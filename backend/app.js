@@ -27,7 +27,16 @@ app.use(cors());
 app.options(cors()); //enable requests for all routes 
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
+  const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE";
+  const requestHeaders = req.headers['access-control-request-headers'];
+
+  res.header("Access-Control-Allow-Origin", "*");
+
+  if (req.method === "OPTIONS") {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+    return res.end();
+  }
 
   next();
 })
