@@ -81,8 +81,7 @@ app.post('/signup', celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().custom(validateURL)
   })
-}),
-  createUser);
+}), createUser);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({

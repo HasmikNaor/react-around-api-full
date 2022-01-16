@@ -12,21 +12,21 @@ const userNotFoundHandler = () => {
   throw error;
 };
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .orFail(() => userNotFoundHandler())
     .then((users) => res.status(200).send(users))
     .catch(next);
 };
 
-module.exports.getUserById = (req, res) => {
+module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .orFail(() => userNotFoundHandler())
     .then((user) => res.status(200).send(user))
     .catch(next);
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email } = req.body;
 
   bcrypt.hash(req.body.password, 10)
@@ -41,7 +41,7 @@ module.exports.createUser = (req, res) => {
     .catch(next);
 };
 
-module.exports.updateProfile = (req, res) => {
+module.exports.updateProfile = (req, res, next) => {
   const id = req.user._id;
   const { name, about } = req.body;
   User.findByIdAndUpdate(id, { name, about }, {
@@ -54,7 +54,7 @@ module.exports.updateProfile = (req, res) => {
     .catch(next);
 };
 
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const id = req.user._id;
   const { avatar } = req.body;
 
@@ -68,7 +68,7 @@ module.exports.updateAvatar = (req, res) => {
     .catch(next);
 };
 
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next) => {
   const id = req.user._id;
   console.log(req)
   User.find({ _id: id })
@@ -77,7 +77,7 @@ module.exports.getCurrentUser = (req, res) => {
     .catch(next);
 }
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
