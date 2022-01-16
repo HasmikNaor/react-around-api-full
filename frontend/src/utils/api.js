@@ -19,6 +19,7 @@ class Api {
 
   getUserInfo() {
     return this.customFetch(`${this._baseUrl}/users/me`, {
+      mode: 'no-cors',
       headers: this._headers
     })
   }
