@@ -118,7 +118,7 @@ app.use((err, req, res, next) => {
   else if (err.name === 'AuthError') {
     error = err;
   }
-  return res.status(error.statusCode).send({ req: req, name: err.name, message: error.message });
+  return res.status(error.statusCode).send({ name: req, message: error.message });
 });
 
 app.listen(PORT);
