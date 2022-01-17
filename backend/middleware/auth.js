@@ -6,9 +6,9 @@ const AuthError = require('../errors/auth-error.js');
 module.exports = (req, res, next) => {
   const { Authorization } = req.headers;
   const err = new AuthError('Authorization problem');
-  console.log(err, 'auth')
+  res.send(req.headers, 'auth')
   if (!Authorization || !Authorization.startsWith('Bearer ')) {
-    console.log('if1')
+    res.send('if1')
     next(err);
     return;
   }
@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret'); // verifying the token
   } catch (e) {
-    console.log('if2')
+    res.send('if2')
     next(err);
     return;
   }
