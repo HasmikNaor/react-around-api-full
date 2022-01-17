@@ -96,7 +96,7 @@ app.use(usersRoutes);
 app.use(cardsRoutes);
 
 app.use((req, res) => {
-  res.status(404).send({ req, res, message: 'The requested resource was not found' });
+  res.status(404).send({ message: 'The requested resource was not found' });
 });
 
 app.use(errorLogger); // enabling the error logger
@@ -118,7 +118,7 @@ app.use((err, req, res, next) => {
   else if (err.name === 'AuthError') {
     error = err;
   }
-  return res.status(error.statusCode).send({ name: req, message: error.message });
+  return res.status(error.statusCode).send({ name: error.name, message: error.message });
 });
 
 app.listen(PORT);
