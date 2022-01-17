@@ -4,15 +4,15 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const AuthError = require('../errors/auth-error.js');
 
 module.exports = (req, res, next) => {
-  const { authorization } = req.headers;
+  const { Authorization } = req.headers;
   const err = new AuthError('Authorization required');
 
-  if (!authorization || !authorization.startsWith('Bearer ')) {
+  if (!Authorization || !Authorization.startsWith('Bearer ')) {
     next(err);
     return;
   }
 
-  const token = authorization.replace('Bearer ', '');
+  const token = Authorization.replace('Bearer ', '');
   let payload;
 
   try {
