@@ -6,12 +6,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    validate: {
-      validator(v) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-      },
-      message: 'not valid address',
-    },
+    // validate: {
+    //   validator(v) {
+    //     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    //   },
+    //   message: 'not valid address',
+    // },
   },
   password: {
     type: String,
