@@ -72,7 +72,7 @@ app.get('/crash-test', () => {
     throw new Error('Server will crash now');
   }, 0);
 });
-
+console.log('test')
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().custom(validateEmail),
@@ -118,7 +118,7 @@ app.use((err, req, res, next) => {
   else if (err.name === 'AuthError') {
     error = err;
   }
-  console.log(req)
+  console.log(req.headers)
   return res.status(error.statusCode).send({ name: error.name, message: error.message });
 });
 
