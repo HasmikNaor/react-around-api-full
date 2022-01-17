@@ -5,6 +5,8 @@ const AuthError = require('../errors/auth-error.js');
 
 module.exports = (req, res, next) => {
   const { Authorization } = req.headers;
+
+  const Authorization = req.headers.Authorization
   const err = new AuthError('Authorization problem');
   console.log(req.headers, 'auth')
   if (!Authorization || !Authorization.startsWith('Bearer ')) {
