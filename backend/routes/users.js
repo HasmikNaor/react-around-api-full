@@ -22,19 +22,23 @@ const validateURL = (value, helpers) => {
   return helpers.error('string.uri');
 }
 
+router.get('/users/me', getCurrentUser);
+
 router.get('/users', getUsers);
-router.get('/users/:userId', getUserById);
+
 router.patch('/users/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
   })
 }), updateProfile);
+
 router.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().custom(validateURL)
   })
 }), updateAvatar);
-router.get('/users/me', getCurrentUser);
+
+router.get('/users/:userId', getUserById);
 
 module.exports = router;

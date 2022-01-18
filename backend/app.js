@@ -64,15 +64,11 @@ const validateEmail = (value, helpers) => {
 
 app.use(requestLogger); // enabling the request logger
 
-// app.use(cors());
-// app.options('*', cors()); //enable requests for all routes 
-
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Server will crash now');
   }, 0);
 });
-console.log('test')
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().custom(validateEmail),
@@ -83,7 +79,7 @@ app.post('/signup', celebrate({
   })
 }), createUser);
 
-app.post('/signin', celebrate({
+app.post('/login', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().custom(validateEmail),
     password: Joi.string().required(),

@@ -28,7 +28,6 @@ module.exports.getUserById = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email } = req.body;
-
   bcrypt.hash(req.body.password, 10)
     .then(hash => User.create({
       name,
@@ -37,7 +36,9 @@ module.exports.createUser = (req, res, next) => {
       email,
       password: hash
     }))
-    .then((user) => res.status(201).send(user))
+    .then((user) => {
+      res.status(201).send(user)
+    })
     .catch(next);
 };
 
@@ -69,17 +70,17 @@ module.exports.updateAvatar = (req, res, next) => {
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
-  const id = req.user._id;
-  console.log(req)
+  const id = req.user._id;    //req.user is payload
   User.find({ _id: id })
     .orFail(() => userNotFoundHandler())
-    .then((user) => res.status(201).send(user))
+    .then((user) => {
+      res.status(201).send(user)
+    })
     .catch(next);
 }
-
+//check to see if a user is in the database then create a token
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id },

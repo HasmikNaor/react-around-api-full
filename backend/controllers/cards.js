@@ -1,21 +1,5 @@
 const Card = require('../models/card');
 
-// const cardErrorHandler = (err, req, res) => {
-//   if (err.name === 'CastError') {
-//      new CastError(err.message);
-//     // return res.status(400).send({ message: err.message });
-//   }
-//   if (err.name === 'ValidationError') {
-//     next(new ValidationError(err.message));
-//     // return res.status(403).send({ message: err.message });
-//   }
-//   if (err.name === 'UserNotFoundError') {
-//     next(new UserNotFoundErr(err.message));
-//     // return res.status(404).send({ message: err.message });
-//   }
-//   next(new OtherError(err.message));
-//   // return res.status(500).send({ message: err.message });
-// };
 
 const cardNotFoundHandler = () => {
   const error = new Error('document not found');
@@ -34,9 +18,11 @@ module.exports.getCards = (req, res, next) => {
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
-
+  console.log('createcard controller', req.user)
   Card.create({ name, link, owner })
-    .then((card) => res.status(201).send(card))
+    .then((card) => {
+      res.status(201).send(card)
+    })
     .catch(next);
 };
 
