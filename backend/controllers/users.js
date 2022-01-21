@@ -11,6 +11,12 @@ const userNotFoundHandler = () => {
   error.name = 'UserNotFoundError';
   throw error;
 };
+const emailAlreadyExists = () => {
+  const error = new Error('choose another email');
+  error.statusCode = 400;
+  error.name = 'UserExists';
+  throw error;
+}
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -27,20 +33,27 @@ module.exports.getUserById = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email } = req.body;
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => User.create({
-      name,
-      about,
-      avatar,
-      email,
-      password: hash
-    }))
+  const email = req.body.email;
+
+  User.findOne({ email })
     .then((user) => {
-      res.status(201).send(user)
+      if (user) {
+        return emailAlreadyExists()
+      } else {
+        return bcrypt.hash(req.body.password, 10)
+          .then(hash => User.create({
+            email: req.body.email,
+            password: hash
+          })
+            .then((user) => {
+              const { name, about, avatar, email, _id } = user;
+              res.status(201).send({ name, about, avatar, email, _id })
+            })
+          )
+      }
     })
-    .catch(next);
-};
+    .catch(next)
+}
 
 module.exports.updateProfile = (req, res, next) => {
   const id = req.user._id;

@@ -1,0 +1,12 @@
+.main {
+  width:100%;
+}
+@media screen and (max-width:500px) {
+  .main {
+    width:88.125%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+  }
+}

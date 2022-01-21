@@ -1,0 +1,13 @@
+.places__btn {
+  border:none;
+  background-color:transparent;
+  width:21px;
+  height:19px;
+  padding:0;
+  background:url(../../../images/white-heart.svg);
+  transition:opacity linear 0.5s;
+}
+.places__btn:hover {
+  cursor:pointer;
+  opacity:0.6;
+}

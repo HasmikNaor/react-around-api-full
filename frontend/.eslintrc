@@ -1,0 +1,34 @@
+{
+  "extends": "airbnb-base",
+  // The middleware for centralized error handling has a next parameter that never gets used. It triggers the no-unused-vars rule to produce an error by ESLint. To avoid this error, we'll disable the rule in our .eslintrc config file
+  "rules": {
+    "no-underscore-dangle": "off",
+    "no-confusing-arrow": "off",
+    "prefer-destructuring": "off",
+    "max-len": "off",
+    "prefer-template": "off",
+    "class-methods-use-this": "off",
+    "arrow-body-style": "off",
+    "quotes": 0,
+    "semi": "off",
+    "no-shadow": "off",
+    "avoidEscape": 0,
+    "allowTemplateLiterals": 0,
+    "import/extensions": "off",
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "next"
+      }
+    ],
+  },
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": [
+        "@babel/preset-react"
+      ]
+    }
+  }
+}

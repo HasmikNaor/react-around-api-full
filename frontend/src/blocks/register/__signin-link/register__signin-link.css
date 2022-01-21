@@ -1,0 +1,12 @@
+.register__signin-link {
+  color:white;
+  display:block;
+  outline:none;
+  text-decoration:none;
+  text-align:center;
+  font-size:14px;
+  line-height:17px;
+  font-weight:400px;
+  margin-top:15px;
+  cursor:pointer;
+}

@@ -1,0 +1,13 @@
+.profile__title {
+  margin:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+}
+@media screen and (max-width:500px) {
+  .profile__title {
+    margin-top:26.25px;
+    margin-bottom:14px;
+  }
+}

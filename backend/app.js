@@ -10,6 +10,8 @@ const UserNotFoundErr = require('./errors/user-not-found-error.js');
 const OtherError = require('./errors/other-error.js');
 const ValidationError = require('./errors/validation-error.js');
 const CastError = require('./errors/cast-error.js');
+const ResourceNotFoundErr = require('./errors/resource-not-found-error');
+
 var cors = require('cors');
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
@@ -69,13 +71,14 @@ app.get('/crash-test', () => {
     throw new Error('Server will crash now');
   }, 0);
 });
+
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().custom(validateEmail),
     password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().custom(validateURL)
+    // name: Joi.string().min(2).max(30),
+    // about: Joi.string().min(2).max(30),
+    // avatar: Joi.string().custom(validateURL)
   })
 }), createUser);
 
@@ -90,10 +93,6 @@ app.use(auth);
 
 app.use(usersRoutes);
 app.use(cardsRoutes);
-
-app.use((req, res) => {
-  res.status(404).send({ message: 'The requested resource was not found' });
-});
 
 app.use(errorLogger); // enabling the error logger
 
@@ -114,7 +113,13 @@ app.use((err, req, res, next) => {
   else if (err.name === 'AuthError') {
     error = err;
   }
-  console.log(req.headers)
+  else if (err.name === 'ResourceNotFound') {
+    error = new ResourceNotFoundErr(err.message);
+  }
+  else if (err.name === 'UserExists') {
+    error = err
+  }
+  console.log("error", error.name)
   return res.status(error.statusCode).send({ name: error.name, message: error.message });
 });
 

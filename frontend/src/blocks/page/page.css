@@ -1,0 +1,20 @@
+.page {
+  max-width:880px;
+  width:100%;
+  padding-top:45px;
+  padding-bottom:60px;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  box-sizing:border-box;
+  font-family:'inter', Arial, sans-serif;
+}
+@media screen and (max-width:500px) {
+  .page {
+    padding-top:28px;
+    padding-bottom:36px;
+  }
+}

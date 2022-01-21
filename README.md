@@ -1,12 +1,8 @@
 # Around the U.S. Back End  
   
 ## Directories  
-  
-`/data` — JSON files to temporarily emulate database integration.  
-  
-`/routes` — routing files.  
-  
-All other directories are optional and may be created by the developer if necessary.   
+  [public domain](https://around.students.nomoreparties.sbs)
+  [GitHub repo](https://github.com/HasmikNaor/react-around-api-full)
   
 ## Running the Project  
   

@@ -1,0 +1,12 @@
+.trash-btn {
+  position:absolute;
+  right:15px;
+  top:18px;
+  border:none;
+  background-color:transparent;
+  transition:opacity linear 0.5s;
+}
+.trash-btn:hover {
+  cursor:pointer;
+  opacity:0.6;
+}
