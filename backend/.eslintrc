@@ -2,6 +2,23 @@
   "extends": "airbnb-base",
   "rules": {
     "no-underscore-dangle": "off",
-    "prefer-destructuring": "off"
+    "prefer-destructuring": "off",
+    "no-confusing-arrow": "off",
+    "max-len": "off",
+    "prefer-template": "off",
+    "class-methods-use-this": "off",
+    "arrow-body-style": "off",
+    "no-useless-concat": "off",
+    "quotes": 0,
+    "no-shadow": "off",
+    "avoidEscape": 0,
+    "allowTemplateLiterals": 0,
+    "import/extensions": "off",
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "next"
+      }
+    ]
   }
 }

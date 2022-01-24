@@ -1,7 +1,7 @@
+const ValidationError = require('../errors/validation-error');
 const Card = require('../models/card');
 
 const cardNotFoundHandler = () => {
-  console.log('cardNotFoundHandler')
   const error = new Error('document not found');
   error.statusCode = 404;
   error.name = 'UserNotFoundError';
@@ -20,10 +20,9 @@ module.exports.createCard = (req, res, next) => {
   const owner = req.user._id;
   Card.create({ name, link, owner })
     .then((card) => {
-      res.status(201).send(card)
+      res.status(201).send(card);
     })
-    .catch(err => console.log(err))
-  // .catch(next);
+    .catch(next);
 };
 
 module.exports.deleteCard = (req, res, next) => {
@@ -34,11 +33,13 @@ module.exports.deleteCard = (req, res, next) => {
       if (card.owner.equals(req.user._id)) {
         Card.findByIdAndDelete(cardId)
           .orFail(() => cardNotFoundHandler())
-          .then(card => res.status(201).send(card))
-          .catch(next)
+          .then((card) => res.status(201).send(card))
+          .catch(next);
+      } else {
+        throw new ValidationError('Forbidden');
       }
     })
-    .catch(next)
+    .catch(next);
 };
 
 module.exports.likeCard = (req, res, next) => {

@@ -5,4 +5,4 @@ class emailErr extends Error {
   }
 }
 
-module.exports = emailErr; 
+module.exports = emailErr;

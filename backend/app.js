@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
-const express = require('express');
-const auth = require('./middleware/auth');
-const { requestLogger, errorLogger } = require('./middleware/logger')
-const { celebrate, Joi } = require('celebrate');
-const { createUser, login } = require('./controllers/users');
 const validator = require('validator');
+const express = require('express');
+const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
-const ResourceNotFoundErr = require('./errors/resource-not-found-error');
-
 const cors = require('cors');
+const auth = require('./middleware/auth');
+const { requestLogger, errorLogger } = require('./middleware/logger');
+const { createUser, login } = require('./controllers/users');
+
+const ResourceNotFoundErr = require('./errors/resource-not-found-error');
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
 
@@ -18,17 +18,16 @@ const cardsRoutes = require('./routes/cards');
 const app = express();
 const { PORT = 3000 } = process.env;
 
-
 app.use(express.json());
 
 const corsOptions = {
   origin: '*',
-  credentials: true,            //access-control-allow-credentials:true
+  credentials: true, // access-control-allow-credentials:true
   optionSuccessStatus: 200,
-}
+};
 
 app.use(cors(corsOptions));
-app.options('*', cors()); //enable requests for all routes 
+app.options('*', cors()); // enable requests for all routes
 
 app.use((req, res, next) => {
   const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE";
@@ -44,21 +43,21 @@ app.use((req, res, next) => {
   }
 
   next();
-})
+});
 
 const validateURL = (value, helpers) => {
   if (validator.isURL(value)) {
     return value;
   }
   return helpers.error('string.uri');
-}
+};
 
 const validateEmail = (value, helpers) => {
   if (validator.isEmail(value)) {
     return value;
   }
   return helpers.error('string.uri');
-}
+};
 
 app.use(requestLogger); // enabling the request logger
 
@@ -74,15 +73,15 @@ app.post('/signup', celebrate({
     password: Joi.string().required(),
     // name: Joi.string().min(2).max(30),
     // about: Joi.string().min(2).max(30),
-    avatar: Joi.string().custom(validateURL)
-  })
+    avatar: Joi.string().custom(validateURL),
+  }),
 }), createUser);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().custom(validateEmail),
     password: Joi.string().required(),
-  })
+  }),
 }), login);
 
 app.use(auth);
@@ -91,8 +90,8 @@ app.use(usersRoutes);
 app.use(cardsRoutes);
 
 app.use((req, res, next) => {
-  next(new ResourceNotFoundErr('resource not found'))
-})
+  next(new ResourceNotFoundErr('resource not found'));
+});
 
 app.use(errorLogger); // enabling the error logger
 

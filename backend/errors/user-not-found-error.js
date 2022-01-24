@@ -5,4 +5,4 @@ class UserNotFoundErr extends Error {
   }
 }
 
-module.exports = UserNotFoundErr; 
+module.exports = UserNotFoundErr;

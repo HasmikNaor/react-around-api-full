@@ -1,20 +1,25 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
 const { NODE_ENV, JWT_SECRET } = process.env;
-const AuthError = require('../errors/auth-error.js');
 const mongoose = require('mongoose');
+const AuthError = require('../errors/auth-error.js');
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   const err = new AuthError('Authorization problem');
-  const token = authorization?.replace('Bearer ', '');
 
-  if (!authorization || !authorization.startsWith('Bearer ') || !token) {
+  if (!authorization || !authorization.startsWith('Bearer ')) {
     next(err);
     return;
   }
+  const token = authorization.replace('Bearer ', '');
 
+  if (!token) {
+    next(err);
+    return;
+  }
   let payload;
 
   try {
@@ -23,8 +28,8 @@ module.exports = (req, res, next) => {
     next(err);
     return;
   }
-  payload._id = mongoose.Types.ObjectId(payload._id)
-  req.user = payload; //This will ensure that the next middleware can see for whom this request was executed
+  payload._id = mongoose.Types.ObjectId(payload._id);
+  req.user = payload; // This will ensure that the next middleware can see for whom this request was executed
 
   next();
-}; 
+};

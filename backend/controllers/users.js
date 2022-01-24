@@ -1,7 +1,6 @@
-const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const UserNotFoundErr = require('../errors/user-not-found-error')
+const User = require('../models/user');
 require('dotenv').config();
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -17,7 +16,7 @@ const emailAlreadyExists = () => {
   error.statusCode = 400;
   error.name = 'UserExists';
   throw error;
-}
+};
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -27,7 +26,6 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getUserById = (req, res, next) => {
-  console.log(req.params.userId)
   User.findById(req.params.userId)
     .orFail(() => userNotFoundHandler())
     .then((user) => res.status(200).send(user))
@@ -40,22 +38,32 @@ module.exports.createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        return emailAlreadyExists()
-      } else {
-        return bcrypt.hash(req.body.password, 10)
-          .then(hash => User.create({
-            email: req.body.email,
-            password: hash
-          })
-            .then((user) => {
-              const { name, about, avatar, email, _id } = user;
-              res.status(201).send({ name, about, avatar, email, _id })
-            })
-          )
+        return emailAlreadyExists();
       }
+      return bcrypt.hash(req.body.password, 10)
+        .then((hash) => User.create({
+          email: req.body.email,
+          password: hash,
+        })
+          .then((user) => {
+            const {
+              name,
+              about,
+              avatar,
+              email,
+              _id,
+            } = user;
+            res.status(201).send({
+              name,
+              about,
+              avatar,
+              email,
+              _id,
+            });
+          }));
     })
-    .catch(next)
-}
+    .catch(next);
+};
 
 module.exports.updateProfile = (req, res, next) => {
   const id = req.user._id;
@@ -85,26 +93,25 @@ module.exports.updateAvatar = (req, res, next) => {
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
-  const id = req.user._id;    //req.user is payload
+  const id = req.user._id; // req.user is payload
   User.find({ _id: id })
     .orFail(() => userNotFoundHandler())
     .then((user) => {
-      res.status(201).send(user)
+      res.status(201).send(user);
     })
     .catch(next);
-}
-//check to see if a user is in the database then create a token
+};
+// check to see if a user is in the database then create a token
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id },
+      const token = jwt.sign(
+        { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
-        { expiresIn: '7d' }
+        { expiresIn: '7d' },
       );
       res.send({ token });
     })
     .catch(next);
-}
-
-
+};

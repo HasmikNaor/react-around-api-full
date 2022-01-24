@@ -5,4 +5,4 @@ class OtherError extends Error {
   }
 }
 
-module.exports = OtherError; 
+module.exports = OtherError;
