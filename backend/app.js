@@ -6,13 +6,9 @@ const { celebrate, Joi } = require('celebrate');
 const { createUser, login } = require('./controllers/users');
 const validator = require('validator');
 const { errors } = require('celebrate');
-const UserNotFoundErr = require('./errors/user-not-found-error.js');
-const OtherError = require('./errors/other-error.js');
-const ValidationError = require('./errors/validation-error.js');
-const CastError = require('./errors/cast-error.js');
 const ResourceNotFoundErr = require('./errors/resource-not-found-error');
 
-var cors = require('cors');
+const cors = require('cors');
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
 
@@ -78,11 +74,11 @@ app.post('/signup', celebrate({
     password: Joi.string().required(),
     // name: Joi.string().min(2).max(30),
     // about: Joi.string().min(2).max(30),
-    // avatar: Joi.string().custom(validateURL)
+    avatar: Joi.string().custom(validateURL)
   })
 }), createUser);
 
-app.post('/login', celebrate({
+app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().custom(validateEmail),
     password: Joi.string().required(),
@@ -94,33 +90,16 @@ app.use(auth);
 app.use(usersRoutes);
 app.use(cardsRoutes);
 
+app.use((req, res, next) => {
+  next(new ResourceNotFoundErr('resource not found'))
+})
+
 app.use(errorLogger); // enabling the error logger
 
 app.use(errors()); // celebrate error handler
 
 app.use((err, req, res, next) => {
-  let error = new OtherError(err.message);
-  console.log(err.name)
-  if (err.name === 'CastError') {
-    error = new CastError(err.message);
-  }
-  else if (err.name === 'ValidationError') {
-    error = new ValidationError(err.message);
-  }
-  else if (err.name === 'UserNotFoundError') {
-    error = new UserNotFoundErr(err.message);
-  }
-  else if (err.name === 'AuthError') {
-    error = err;
-  }
-  else if (err.name === 'ResourceNotFound') {
-    error = new ResourceNotFoundErr(err.message);
-  }
-  else if (err.name === 'UserExists') {
-    error = err
-  }
-  console.log("error", error.name)
-  return res.status(error.statusCode).send({ name: error.name, message: error.message });
+  return res.status(err.statusCode).send({ name: err.name, message: err.message });
 });
 
 app.listen(PORT);

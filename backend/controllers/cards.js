@@ -22,7 +22,8 @@ module.exports.createCard = (req, res, next) => {
     .then((card) => {
       res.status(201).send(card)
     })
-    .catch(next);
+    .catch(err => console.log(err))
+  // .catch(next);
 };
 
 module.exports.deleteCard = (req, res, next) => {

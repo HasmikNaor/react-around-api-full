@@ -10,6 +10,7 @@ const {
   updateAvatar,
   getCurrentUser
 } = require('../controllers/users');
+const ValidationError = require('../errors/validation-error');
 
 const router = express.Router();
 
