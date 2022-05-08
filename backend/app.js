@@ -20,30 +20,30 @@ const { PORT = 3000 } = process.env;
 
 app.use(express.json());
 
-const corsOptions = {
-  origin: '*',
-  credentials: true, // access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: '*',
+//   credentials: true, // access-control-allow-credentials:true
+//   optionSuccessStatus: 200,
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.options('*', cors()); // enable requests for all routes
 
-app.use((req, res, next) => {
-  const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE";
-  const requestHeaders = req.headers['access-control-request-headers'];
-  const { method } = req;
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Credentials", "true");
+// app.use((req, res, next) => {
+//   const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE";
+//   const requestHeaders = req.headers['access-control-request-headers'];
+//   const { method } = req;
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Credentials", "true");
 
-  if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    res.header('Access-Control-Allow-Headers', requestHeaders);
-    // return res.end();
-  }
+//   if (method === 'OPTIONS') {
+//     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+//     res.header('Access-Control-Allow-Headers', requestHeaders);
+//     // return res.end();
+//   }
 
-  next();
-});
+//   next();
+// });
 
 const validateURL = (value, helpers) => {
   if (validator.isURL(value)) {
